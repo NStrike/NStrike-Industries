@@ -7,10 +7,10 @@ Projeto de P3 - Folha de Pagamento
 - Adição de um empregado [X]
 - Remoção de um empregado [X]
 - Lançar um Cartão de Ponto [ ]
-- Lançar um Resultado Venda [ ]
+- Lançar um Resultado Venda [X]
 - Lançar uma taxa de serviço [ ]
 - Alterar detalhes de um empregado [ ]
 - Rodar a folha de pagamento para hoje [ ]
-- Undo/redo [ ]
+- Undo/redo [X] Das Marcadas Com "X"
 - Agenda de Pagamento [ ]
 - Criação de Novas Agendas de Pagamento [ ]
