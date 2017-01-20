@@ -4,8 +4,8 @@ Projeto de P3 - Folha de Pagamento
 
 # Status de Desenvolvimento:
 
-- Adição de um empregado [ ]
-- Remoção de um empregado [ ]
+- Adição de um empregado [X]
+- Remoção de um empregado [X]
 - Lançar um Cartão de Ponto [ ]
 - Lançar um Resultado Venda [ ]
 - Lançar uma taxa de serviço [ ]
