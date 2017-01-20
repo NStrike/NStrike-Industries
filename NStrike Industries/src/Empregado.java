@@ -9,6 +9,6 @@ public class Empregado {
 	
 	//Atributos
 	public float salarioFixo; // Mensal Horario
-	public float comissao; // Comissionado
-	public float salarioTotal; // Salario Fixo + Comissao
+	public float comissaoTaxa; // Comissionado - % Sobre O Valor Da Venda
+	public float comissaoValor; // Comissionado - Valor Total Das Comissões
 }

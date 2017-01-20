@@ -10,8 +10,7 @@ public class NStrikeIndustries {
 			Funcionario.metodo = 0;
 			Funcionario.sindicato = 0;
 			Funcionario.salarioFixo = 0;
-			Funcionario.comissao = 0;
-			Funcionario.salarioTotal = 0;
+			Funcionario.comissaoTaxa = 0;
 			Funcionario.sindicatoID = 0;
 		
 			return Funcionario;
@@ -27,7 +26,7 @@ public class NStrikeIndustries {
 		
 		Empregado[] Empregados = new Empregado[100];
 		Empregado Cache = new Empregado();
-		Cache = inicializar(Cache);
+		Empregado Troca = new Empregado();		
 		
 		int i;
 		
@@ -37,7 +36,7 @@ public class NStrikeIndustries {
         	Empregados[i] = inicializar(Empregados[i]);
         }		
 
-		int Comando = 1, undo, redo, totalDeFuncionarios = 0, id = 0;
+		int Comando = 1, undo, redo, totalDeFuncionarios = 0, id = 0, confirmar;
 		
 		while(Comando > 0){
 			System.out.println("\nComandos Dísponiveis No Programa:");
@@ -98,9 +97,9 @@ public class NStrikeIndustries {
 					
 					if(Empregados[i].tipo == 3){
 							System.out.println("Digite O Percentual De Comissão Sobre As Vendas Realizadas:");
-							Empregados[i].comissao = scan.nextInt();
+							Empregados[i].comissaoTaxa = scan.nextInt();
 							scan.nextLine();
-							Cache.comissao = Empregados[i].comissao;
+							Cache.comissaoTaxa = Empregados[i].comissaoTaxa;
 					}
 					
 					System.out.println("Método De Pagamento:\n"
@@ -127,16 +126,16 @@ public class NStrikeIndustries {
 					}
 					
 					System.out.printf("Funcionário %s Cadastrado Com Sucesso!\n", Empregados[i].nome);
-					System.out.printf("Numero De Indentificação %02d \n\n", i);
+					System.out.printf("Numero De Indentificação %02d\n", i);
 				}
 			}
 			
 			else if(Comando == 2){
 				
-				int confirmar = 2;
+				confirmar = 2;
 				while(confirmar == 2){
 					
-					System.out.println("Digite o ID Do Funcionário Que Deseja Remover Do Sistema:");
+					System.out.println("Digite o Numero De Identificação Do Funcionário Que Deseja Remover Do Sistema:");
 					id = scan.nextInt();
 					scan.nextLine();
 					
@@ -158,7 +157,7 @@ public class NStrikeIndustries {
 							Cache.endereco = Empregados[id].endereco;
 							Cache.tipo = Empregados[id].tipo;
 							Cache.salarioFixo = Empregados[id].salarioFixo;
-							Cache.comissao = Empregados[id].comissao;
+							Cache.comissaoTaxa = Empregados[id].comissaoTaxa;
 							Cache.metodo = Empregados[id].metodo;
 							Cache.sindicato = Empregados[id].sindicato;
 							Cache.sindicatoID = Empregados[id].sindicatoID;
@@ -174,6 +173,40 @@ public class NStrikeIndustries {
 				;
 			}
 			
+			else if(Comando == 4){
+				
+				;
+			}
+			
+			else if(Comando == 5){
+				
+				confirmar = 1;
+				
+				while(confirmar != 3){
+					System.out.println("Insira O Numero De Identificação Do Vendedor(Funcionário):");
+					id = scan.nextInt();
+					scan.nextLine();
+					Cache.comissaoValor = Empregados[id].comissaoValor;
+					
+					if(Empregados[id].tipo != 3){
+						System.out.printf("Funcionário %s Não É Comissionado\n\n", Empregados[id].nome);
+					}
+					
+					else{
+						
+						System.out.printf("\nDado Do Funcionário\n"
+								+ "Nome: %s\n\n", Empregados[id].nome);
+						System.out.println("Insira O Valor Da Venda Efetuada:");
+						System.out.print("R$ ");
+						Empregados[id].comissaoValor = scan.nextInt();
+						scan.nextLine();
+						Empregados[id].comissaoValor *= Empregados[id].comissaoTaxa/100;
+						System.out.println("Venda Registrada Com Sucesso!");
+						confirmar = 3;
+					}
+				}
+			}
+			
 			else{
 				System.out.println("\nSincronizando Alterações Locais Com Os Servidores...");
 				System.out.println("\nEncerrando Software Da Folha De Pagamento...");
@@ -181,11 +214,13 @@ public class NStrikeIndustries {
 			}
 			
 			if(Comando > 0 && Comando <= 7){
-				System.out.println("Deseja Desfazer A Última Ação?");
+				System.out.println("\nDeseja Desfazer A Última Ação?");
 				System.out.println("\t1 - Sim\n\t2 - Não");
 				undo = scan.nextInt();
 				
 				if(undo == 1){
+					
+					Troca = inicializar(Troca);
 					
 					switch(Comando){
 						
@@ -199,10 +234,15 @@ public class NStrikeIndustries {
 						Empregados[id].endereco = Cache.endereco;
 						Empregados[id].tipo = Cache.tipo;
 						Empregados[id].salarioFixo = Cache.salarioFixo;
-						Empregados[id].comissao = Cache.comissao;
+						Empregados[id].comissaoTaxa = Cache.comissaoTaxa;
 						Empregados[id].metodo = Cache.metodo;
 						Empregados[id].sindicato = Cache.sindicato;
 						Empregados[id].sindicatoID = Cache.sindicatoID;
+						
+					case 3:
+						Troca.comissaoValor = Empregados[id].comissaoValor;
+						Empregados[id].comissaoValor = Cache.comissaoValor;
+						Cache.comissaoValor = Troca.comissaoValor;
 					}					
 					
 					System.out.println("Deseja Refazer A Última Ação?");
@@ -219,7 +259,7 @@ public class NStrikeIndustries {
 							Empregados[i].endereco = Cache.endereco;
 							Empregados[i].tipo = Cache.tipo;
 							Empregados[i].salarioFixo = Cache.salarioFixo;
-							Empregados[i].comissao = Cache.comissao;
+							Empregados[i].comissaoTaxa = Cache.comissaoTaxa;
 							Empregados[i].metodo = Cache.metodo;
 							Empregados[i].sindicato = Cache.sindicato;
 							Empregados[i].sindicatoID = Cache.sindicatoID;
@@ -227,6 +267,11 @@ public class NStrikeIndustries {
 						case 2:
 							Empregados[id] = inicializar(Empregados[id]);
 							totalDeFuncionarios--;
+							
+						case 3:
+							Troca.comissaoValor = Empregados[id].comissaoValor;
+							Empregados[id].comissaoValor = Cache.comissaoValor;
+							Cache.comissaoValor = Troca.comissaoValor;
 						}
 						
 					}
