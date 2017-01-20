@@ -91,7 +91,7 @@ public class NStrikeIndustries {
 					Cache.tipo = Empregados[i].tipo;
 					
 					System.out.println("Digite O Valor Fixo Do Salário Do Funcionário:");
-					Empregados[i].salarioFixo = scan.nextInt();
+					Empregados[i].salarioFixo = scan.nextFloat();
 					scan.nextLine();
 					Cache.salarioFixo = Empregados[i].salarioFixo;
 					
@@ -168,9 +168,144 @@ public class NStrikeIndustries {
 				}				
 			}
 			
-			else if(Comando == 3){
+			else if(Comando == 3){				
 				
-				;
+				confirmar = 2;
+				while(confirmar == 2){
+					
+					System.out.println("Insira O Numero De Identificação Do Funcionário Que Deseja Editar:");
+					id = scan.nextInt();
+					scan.nextLine();
+					
+					if(Empregados[id].nome == null){
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+					}
+					
+					else{
+						
+						System.out.printf("Deseja Editar O Nome Do Funcionário?\n"
+								+ "Atual: %s\n"
+								+ "\t1 - Sim\n"
+								+ "\t2 - Não\n", Empregados[id].nome);
+						confirmar = scan.nextInt();
+						scan.nextLine();
+						
+						if(confirmar == 1){
+							System.out.println("Digite Novo Nome Do Funcionário:");
+							Cache.nome = Empregados[id].nome;
+							Empregados[id].nome = scan.nextLine();
+							System.out.println("Nome Do Funcionário Editado Com Sucesso!\n");
+						}
+						
+						System.out.printf("Deseja Editar O Endereço Do Funcionário?\n"
+								+ "Atual: %s\n"
+								+ "\t1 - Sim\n"
+								+ "\t2 - Não\n", Empregados[id].endereco);
+						confirmar = scan.nextInt();
+						scan.nextLine();
+						
+						if(confirmar == 1){
+							System.out.println("Digite Novo Endereço Do Funcionário:");
+							Cache.endereco = Empregados[id].endereco;
+							Empregados[id].endereco = scan.nextLine();
+							System.out.println("Endereço Do Funcionário Editado Com Sucesso!\n");
+						}
+						
+						System.out.println("Deseja Editar O Tipo Do Funcionário?");
+						switch(Empregados[id].tipo){
+						case 1:
+							System.out.println("Atual: 1 - Horista");
+						case 2:
+							System.out.println("Atual: 2 - Assalariado");
+						case 3:
+							System.out.println("Atual: 3 - Comissionado");
+						}
+						System.out.printf("\t1 - Sim\n"
+								+ "\t2 - Não\n");
+						confirmar = scan.nextInt();
+						scan.nextLine();
+						
+						if(confirmar == 1){
+							System.out.println("Escolha O Novo Tipo Do Funcionário:\n"
+									+ "\t1 - Horista\n"
+									+ "\t2 - Assalariado\n"
+									+ "\t3 - Comissionado");
+							Cache.tipo = Empregados[id].tipo;
+							Empregados[id].tipo = scan.nextInt();
+							System.out.println("Tipo Do Funcionário Editado Com Sucesso!\n");
+						}
+						
+						System.out.println("Deseja Editar O Método De Pagamento?");
+						switch(Empregados[id].metodo){
+						case 1:
+							System.out.println("Atual: 1 - Cheque Via Correios");
+						case 2:
+							System.out.println("Atual: 2 - Cheque Em Mãos");
+						case 3:
+							System.out.println("Atual: 3 - Déposito Bancário");
+						}
+						System.out.printf("\t1 - Sim\n"
+								+ "\t2 - Não\n");
+						confirmar = scan.nextInt();
+						scan.nextLine();
+						
+						if(confirmar == 1){
+							System.out.println("Escolha O Novo Método De Pagamento:\n"
+									+ "\t1 - Cheque Via Correios\n"
+									+ "\t2 - Cheque Em Mãos\n"
+									+ "\t3 - Déposito Bancário");
+							Cache.metodo = Empregados[id].metodo;
+							Empregados[id].metodo = scan.nextInt();
+							System.out.println("Método De Pagamento Editado Com Sucesso!\n");
+						}
+						
+						System.out.println("Deseja Editar A Condição Sindical Do Funcionário?");
+						switch(Empregados[id].sindicato){
+						case 1:
+							System.out.println("Atual: 1 - Sim");
+						case 2:
+							System.out.println("Atual: 2 - Não");
+
+						}
+						System.out.printf("\t1 - Sim\n"
+								+ "\t2 - Não\n");
+						confirmar = scan.nextInt();
+						scan.nextLine();
+						
+						if(confirmar == 1){
+							System.out.println("Escolha A Nova Condição Sindical Do Funcionário:\n"
+									+ "\t1 - Sim\n"
+									+ "\t2 - Não\n");
+	
+							Cache.sindicato = Empregados[id].sindicato;
+							Empregados[id].sindicato = scan.nextInt();
+							System.out.println("Condição Sindical Do Funcionário Editada Com Sucesso!\n");
+						}
+						
+						System.out.printf("Deseja Editar Indentificação Sindical Do Funcionário?\n"
+								+ "Atual %02d\n", Empregados[id].sindicatoID);
+						
+						System.out.printf("\t1 - Sim\n"
+								+ "\t2 - Não\n");
+						confirmar = scan.nextInt();
+						scan.nextLine();
+						
+						if(confirmar == 1){
+							System.out.println("Digite A Nova Indentificação Sindical Do Funcionário:\n"
+									+ "\t1 - Sim\n"
+									+ "\t2 - Não\n");
+	
+							Cache.sindicatoID = Empregados[id].sindicatoID;
+							Empregados[id].sindicatoID = scan.nextInt();
+							System.out.println("Indentificação Sindical Do Funcionário Editada Com Sucesso!\n");
+						}
+						
+						System.out.println("\nSalvando Edições....");
+						System.out.println("\nEdição De Funcionário Finalizada Com Sucesso!");
+						
+						confirmar = 1;
+					}	
+				}
 			}
 			
 			else if(Comando == 4){
@@ -198,9 +333,8 @@ public class NStrikeIndustries {
 								+ "Nome: %s\n\n", Empregados[id].nome);
 						System.out.println("Insira O Valor Da Venda Efetuada:");
 						System.out.print("R$ ");
-						Empregados[id].comissaoValor = scan.nextInt();
+						Empregados[id].comissaoValor += scan.nextInt();
 						scan.nextLine();
-						Empregados[id].comissaoValor *= Empregados[id].comissaoTaxa/100;
 						System.out.println("Venda Registrada Com Sucesso!");
 						confirmar = 3;
 					}
@@ -240,6 +374,26 @@ public class NStrikeIndustries {
 						Empregados[id].sindicatoID = Cache.sindicatoID;
 						
 					case 3:
+						Troca.nome = Empregados[id].nome;
+						Empregados[id].nome = Cache.nome;
+						Cache.nome = Troca.nome;
+						Troca.endereco = Empregados[id].endereco;
+						Empregados[id].endereco = Cache.endereco;
+						Cache.endereco = Troca.endereco;
+						Troca.tipo = Empregados[id].tipo;
+						Empregados[id].tipo = Cache.tipo;
+						Cache.tipo = Troca.tipo;
+						Troca.metodo = Empregados[id].metodo;
+						Empregados[id].metodo = Cache.metodo;
+						Cache.metodo = Troca.metodo;
+						Troca.sindicato = Empregados[id].sindicato;
+						Empregados[id].sindicato = Cache.sindicato;
+						Cache.sindicato = Troca.sindicato;
+						Troca.sindicatoID = Empregados[id].sindicatoID;
+						Empregados[id].sindicatoID = Cache.sindicatoID;
+						Cache.sindicatoID = Troca.sindicatoID;
+						
+					case 5:
 						Troca.comissaoValor = Empregados[id].comissaoValor;
 						Empregados[id].comissaoValor = Cache.comissaoValor;
 						Cache.comissaoValor = Troca.comissaoValor;
@@ -269,6 +423,26 @@ public class NStrikeIndustries {
 							totalDeFuncionarios--;
 							
 						case 3:
+							Troca.nome = Empregados[id].nome;
+							Empregados[id].nome = Cache.nome;
+							Cache.nome = Troca.nome;
+							Troca.endereco = Empregados[id].endereco;
+							Empregados[id].endereco = Cache.endereco;
+							Cache.endereco = Troca.endereco;
+							Troca.tipo = Empregados[id].tipo;
+							Empregados[id].tipo = Cache.tipo;
+							Cache.tipo = Troca.tipo;
+							Troca.metodo = Empregados[id].metodo;
+							Empregados[id].metodo = Cache.metodo;
+							Cache.metodo = Troca.metodo;
+							Troca.sindicato = Empregados[id].sindicato;
+							Empregados[id].sindicato = Cache.sindicato;
+							Cache.sindicato = Troca.sindicato;
+							Troca.sindicatoID = Empregados[id].sindicatoID;
+							Empregados[id].sindicatoID = Cache.sindicatoID;
+							Cache.sindicatoID = Troca.sindicatoID;
+							
+						case 5:
 							Troca.comissaoValor = Empregados[id].comissaoValor;
 							Empregados[id].comissaoValor = Cache.comissaoValor;
 							Cache.comissaoValor = Troca.comissaoValor;
