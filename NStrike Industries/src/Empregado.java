@@ -4,7 +4,7 @@ public class Empregado {
 	public String endereco;
 	
 	public int tipo; // Horista Assalariado Comissionado
-	public int agenda; // Semanal Bi-Semanal Mensal
+	public int agenda; // Semanal Mensal Bi-Semanal
 	public int agendaNova; // Ativado ou Desativado
 	public float comissaoTaxa; // Comissionado - % Sobre O Valor Da Venda
 	public float salarioFixo;
@@ -21,8 +21,11 @@ public class Empregado {
 	
 	public float salarioTotal; // Salario A Ser Pago No Dia De Pagamento
 	
-	public int horas; // Numero De Horas Trabalhadas
-	public int horasCache;
+	public int horasDia; // Numero De Horas Trabalhadas No Dia
+	public int horasDiaCache;
+	
+	public int horasTotal; // Numero De Horas Trabalhadas
+	public int horasTotalCache;
 	
 	public int horasExtras; // Numero De Horas Extras Trabalhadas
 	public int horasExtrasCache;

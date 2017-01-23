@@ -21,7 +21,8 @@ public class NStrikeIndustries {
 			
 			Funcionario.comissaoValor = 0;
 			Funcionario.salarioTotal = 0;
-			Funcionario.horas = 0;
+			Funcionario.horasDia = 0;
+			Funcionario.horasTotal = 0;
 			Funcionario.horasExtras = 0;
 		
 			return Funcionario;
@@ -199,7 +200,7 @@ public class NStrikeIndustries {
 					scan.nextLine();
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%02d)\n",id);
 					}
 					
 					else{
@@ -230,7 +231,8 @@ public class NStrikeIndustries {
 							Cache.comissaoValor = Empregados[id].comissaoValor;
 							Cache.salarioTotal = Empregados[id].salarioTotal;
 							
-							Cache.horas = Empregados[id].horas;
+							Cache.horasDia = Empregados[id].horasDia;
+							Cache.horasTotal = Empregados[id].horasTotal;
 							Cache.horasExtras = Empregados[id].horasExtras;
 							
 							Empregados[id] = inicializar(Empregados[id]);
@@ -250,7 +252,7 @@ public class NStrikeIndustries {
 					scan.nextLine();
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%02d)\n",id);
 					}
 					
 					else{
@@ -427,7 +429,7 @@ public class NStrikeIndustries {
 					scan.nextLine();				
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%02d)\n", id);
 					}
 					
 					else{
@@ -437,15 +439,33 @@ public class NStrikeIndustries {
 						}
 						
 						else{
-							Cache.horas = Empregados[id].horas;
+							Cache.horasDia = Empregados[id].horasDia;
 							Cache.horasExtras = Empregados[id].horasExtras;
 							confirmar = Empregados[id].tipo;
+							int entradaHoras;
 							
 							System.out.printf("\nDado Do Funcionário\n"
 									+ "Nome: %s\n\n", Empregados[id].nome);
 							System.out.println("Insira O Total De Horas Trabalhadas:");
-							Empregados[id].horas += scan.nextInt();
+							entradaHoras = scan.nextInt();
 							scan.nextLine();
+							
+							if(Empregados[id].horasDia == 8){
+								Empregados[id].horasExtras += entradaHoras;
+							}
+							
+							else if((Empregados[id].horasDia + entradaHoras) <= 8){
+								Empregados[id].horasDia += entradaHoras;
+							}
+							
+							else{
+								while(Empregados[id].horasDia < 8){
+									Empregados[id].horasDia++;
+									entradaHoras--;
+								}
+								Empregados[id].horasExtras += entradaHoras;
+							}
+							
 							System.out.println("Ponto Registrado Com Sucesso!");
 						}
 					}
@@ -462,7 +482,7 @@ public class NStrikeIndustries {
 					scan.nextLine();
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%02d)\n",id);
 					}
 					
 					else{
@@ -495,7 +515,7 @@ public class NStrikeIndustries {
 					scan.nextLine();
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%02d)\n", id);
 					}
 					
 					else{
@@ -522,13 +542,20 @@ public class NStrikeIndustries {
 			else if(Comando == 7){
 				for(i = 0 ; i < 100 ; i++){
 					switch(Empregados[i].agenda){
-					
 					case 1://Semanal
 						if(Data[3] % 7 == 5){ 
 							switch(Empregados[i].tipo){
 							case 1://Horista
-								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horas;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+								Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+								Empregados[i].horasTotal = 0;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+								Empregados[i].horasDiaCache = Empregados[i].horasDia;
+								Empregados[i].horasDia = 0;
 								Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
+								Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+								Empregados[i].horasExtras = 0;								
+									
 								break;
 							case 2://Assalariado
 								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 7;
@@ -536,25 +563,68 @@ public class NStrikeIndustries {
 							case 3://Comissionado
 								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 7;
 								Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+								Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+								Empregados[i].comissaoValor = 0;
 								break;	
+							}
+							
+							System.out.printf("\nDados Do Funcionário Pago\n"
+									+ "Nome: %s\n"
+									+ "Numero De Identificação: %02d\n"
+									+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+							switch(Empregados[i].metodo){
+							case 1:
+								System.out.println("Método De Pagamento: Cheque Via Correios");
+								break;							
+							case 2:
+								System.out.println("Método De Pagamento: Cheque Em Mãos");
+								break;							
+							case 3:
+								System.out.println("Método De Pagamento: Déposito Bancário");
+								break;
 							}
 						}
 						break;
 						
-					case 2://Bi-Semanal
+					case 2://Mensal
 						if(Data[0]  == 30){
 							switch(Empregados[i].tipo){
 							case 1://Horista
-								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horas;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+								Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+								Empregados[i].horasTotal = 0;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+								Empregados[i].horasDiaCache = Empregados[i].horasDia;
+								Empregados[i].horasDia = 0;
 								Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
+								Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+								Empregados[i].horasExtras = 0;
 								break;
 							case 2://Assalariado
-								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 14;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo;
 								break;
 							case 3://Comissionado
-								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 14;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo;
 								Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+								Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+								Empregados[i].comissaoValor = 0;
 								break;	
+							}
+							
+							System.out.printf("\nDados Do Funcionário Pago\n"
+									+ "Nome: %s\n"
+									+ "Numero De Identificação: %02d\n"
+									+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+							switch(Empregados[i].metodo){
+							case 1:
+								System.out.println("Método De Pagamento: Cheque Via Correios");
+								break;							
+							case 2:
+								System.out.println("Método De Pagamento: Cheque Em Mãos");
+								break;							
+							case 3:
+								System.out.println("Método De Pagamento: Déposito Bancário");
+								break;
 							}
 						}
 						
@@ -563,9 +633,16 @@ public class NStrikeIndustries {
 								if(Data[0]  == 28 || Data[0]  == 29){
 									switch(Empregados[i].tipo){
 									case 1://Horista
-										Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horas;
+										Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+										Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+										Empregados[i].horasTotal = 0;
+										Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+										Empregados[i].horasDiaCache = Empregados[i].horasDia;
+										Empregados[i].horasDia = 0;
 										Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
-;
+										Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+										Empregados[i].horasExtras = 0;
+
 										break;
 									case 2://Assalariado
 										Empregados[i].salarioTotal += Empregados[i].salarioFixo;
@@ -573,31 +650,215 @@ public class NStrikeIndustries {
 									case 3://Comissionado
 										Empregados[i].salarioTotal += Empregados[i].salarioFixo;
 										Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+										Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+										Empregados[i].comissaoValor = 0;
 										break;	
+									}
+									
+									System.out.printf("\nDados Do Funcionário Pago\n"
+											+ "Nome: %s\n"
+											+ "Numero De Identificação: %02d\n"
+											+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+									switch(Empregados[i].metodo){
+									case 1:
+										System.out.println("Método De Pagamento: Cheque Via Correios");
+										break;							
+									case 2:
+										System.out.println("Método De Pagamento: Cheque Em Mãos");
+										break;							
+									case 3:
+										System.out.println("Método De Pagamento: Déposito Bancário");
+										break;
 									}
 								}								
 							}
 						}
 						break;
 						
-					case 3:// Mensal
+					case 3:// Bi-Semanal
 						
 						if(Data[3] % 7 == 5){
 							if((Data[3] / 7) % 2 == 0){
 								switch(Empregados[i].tipo){
 								case 1://Horista
+									Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+									Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+									Empregados[i].horasTotal = 0;
+									Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+									Empregados[i].horasDiaCache = Empregados[i].horasDia;
+									Empregados[i].horasDia = 0;
+									Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
+									Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+									Empregados[i].horasExtras = 0;
 									break;
 								case 2://Assalariado
+									Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 14;
 									break;
 								case 3://Comissionado
+									Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 14;
+									Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+									Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+									Empregados[i].comissaoValor = 0;
 									break;	
+								}
+								
+								System.out.printf("\nDados Do Funcionário Pago\n"
+										+ "Nome: %s\n"
+										+ "Numero De Identificação: %02d\n"
+										+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+								switch(Empregados[i].metodo){
+								case 1:
+									System.out.println("Método De Pagamento: Cheque Via Correios");
+									break;							
+								case 2:
+									System.out.println("Método De Pagamento: Cheque Em Mãos");
+									break;							
+								case 3:
+									System.out.println("Método De Pagamento: Déposito Bancário");
+									break;
 								}
 							}							
 						}
 						break;
+						
+					case 4://Semanal Segunda
+						if(Data[3] % 7 == 1){ 
+							switch(Empregados[i].tipo){
+							case 1://Horista
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+								Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+								Empregados[i].horasTotal = 0;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+								Empregados[i].horasDiaCache = Empregados[i].horasDia;
+								Empregados[i].horasDia = 0;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
+								Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+								Empregados[i].horasExtras = 0;
+								break;
+							case 2://Assalariado
+								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 7;
+								break;
+							case 3://Comissionado
+								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 7;
+								Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+								Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+								Empregados[i].comissaoValor = 0;
+								break;	
+							}
+							
+							System.out.printf("\nDados Do Funcionário Pago\n"
+									+ "Nome: %s\n"
+									+ "Numero De Identificação: %02d\n"
+									+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+							switch(Empregados[i].metodo){
+							case 1:
+								System.out.println("Método De Pagamento: Cheque Via Correios");
+								break;							
+							case 2:
+								System.out.println("Método De Pagamento: Cheque Em Mãos");
+								break;							
+							case 3:
+								System.out.println("Método De Pagamento: Déposito Bancário");
+								break;
+							}
+						}
+						break;	
+						
+					case 5://Semanal Quarta
+						if(Data[3] % 7 == 3){ 
+							switch(Empregados[i].tipo){
+							case 1://Horista
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+								Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+								Empregados[i].horasTotal = 0;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+								Empregados[i].horasDiaCache = Empregados[i].horasDia;
+								Empregados[i].horasDia = 0;
+								Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
+								Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+								Empregados[i].horasExtras = 0;
+								break;
+							case 2://Assalariado
+								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 7;
+								break;
+							case 3://Comissionado
+								Empregados[i].salarioTotal += (Empregados[i].salarioFixo/30) * 7;
+								Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+								Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+								Empregados[i].comissaoValor = 0;
+								break;	
+							}
+							
+							System.out.printf("\nDados Do Funcionário Pago\n"
+									+ "Nome: %s\n"
+									+ "Numero De Identificação: %02d\n"
+									+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+							switch(Empregados[i].metodo){
+							case 1:
+								System.out.println("Método De Pagamento: Cheque Via Correios");
+								break;							
+							case 2:
+								System.out.println("Método De Pagamento: Cheque Em Mãos");
+								break;							
+							case 3:
+								System.out.println("Método De Pagamento: Déposito Bancário");
+								break;
+							}
+						}
+						break;
+						
+					
+					
+				case 6:// Mensal 1
+					
+					if(Data[0] == 1){
+						switch(Empregados[i].tipo){
+						case 1://Horista
+							Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasTotal;
+							Empregados[i].horasTotalCache = Empregados[i].horasTotal;
+							Empregados[i].horasTotal = 0;
+							Empregados[i].salarioTotal += Empregados[i].salarioFixo * Empregados[i].horasDia;
+							Empregados[i].horasDiaCache = Empregados[i].horasDia;
+							Empregados[i].horasDia = 0;
+							Empregados[i].salarioTotal += Empregados[i].salarioFixo * 1.5 * Empregados[i].horasExtras;
+							Empregados[i].horasExtrasCache = Empregados[i].horasExtras;
+							Empregados[i].horasExtras = 0;
+							break;
+						case 2://Assalariado
+							Empregados[i].salarioTotal += Empregados[i].salarioFixo;
+							break;
+						case 3://Comissionado
+							Empregados[i].salarioTotal += Empregados[i].salarioFixo;
+							Empregados[i].salarioTotal += Empregados[i].comissaoValor * (Empregados[i].comissaoTaxa/100);
+							Empregados[i].comissaoValorCache = Empregados[i].comissaoValor;
+							Empregados[i].comissaoValor = 0;
+							break;	
+						}
+						
+						System.out.printf("\nDados Do Funcionário Pago\n"
+								+ "Nome: %s\n"
+								+ "Numero De Identificação: %02d\n"
+								+ "Valor %.2f\n", Empregados[id].nome, i, Empregados[i].salarioTotal);
+						switch(Empregados[i].metodo){
+						case 1:
+							System.out.println("Método De Pagamento: Cheque Via Correios");
+							break;							
+						case 2:
+							System.out.println("Método De Pagamento: Cheque Em Mãos");
+							break;							
+						case 3:
+							System.out.println("Método De Pagamento: Déposito Bancário");
+							break;
+						}
+					}					
+					
+					break;					
 					}
 				}
-			}
+			}	
+					
+				
+					
 			
 			else if(Comando == 8){
 				confirmar = 2;
@@ -608,7 +869,7 @@ public class NStrikeIndustries {
 					scan.nextLine();
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n", id);
 					}
 					
 					else{
@@ -619,19 +880,19 @@ public class NStrikeIndustries {
 							System.out.println("Atual: 1 - Semanal");
 							break;
 						case 2:
-							System.out.println("Atual: 2 - Bi-Semanal");
+							System.out.println("Atual: 2 - Mensal");
 							break;
 						case 3:	
-							System.out.println("Atual: 3 - Mensal");
+							System.out.println("Atual: 3 - Bi-Semanal");
 							break;
 						case 4:
-							System.out.println("Atual: 1 - Semanal Segunda");
+							System.out.println("Atual: 4 - Semanal Segunda");
 							break;
 						case 5:
-							System.out.println("Atual: 1 - Semanal Quarta");
+							System.out.println("Atual: 5 - Semanal Quarta");
 							break;
 						case 6:
-							System.out.println("Atual: 1 - Mensal 1");
+							System.out.println("Atual: 6 - Mensal 1");
 							break;
 						}
 						
@@ -643,10 +904,15 @@ public class NStrikeIndustries {
 						scan.nextLine();
 						
 						if(confirmar == 1){
-							System.out.println("Escolha A Nova Agenda De Pagamento Do Funcionário:"
+							System.out.println("Escolha A Nova Agenda De Pagamento Do Funcionário:\n"
 									+ "\t1 - Semanal\n"
-									+ "\t2 - Bi-Semanal\n"
-									+ "\t3 - Mensal");
+									+ "\t2 - Mensal\n"
+									+ "\t3 - Bi-Semanal");
+							if(Empregados[id].agendaNova == 1){
+								System.out.println("\t4 - Semanal Segunda\n"
+										+ "\t5 - Semanal Quarta\n"
+										+ "\t6 - Mensal 1");
+							}
 							Empregados[id].agenda =  scan.nextInt();
 							scan.nextLine();
 							
@@ -666,7 +932,7 @@ public class NStrikeIndustries {
 					scan.nextLine();
 					
 					if(Empregados[id].nome == null){
-						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%d)\n");
+						System.out.printf("Não Existe Nenhum Cadastro De Funcinário Com O ID(%02d)\n", id);
 					}
 					
 					else if(Empregados[id].agendaNova == 1){
@@ -677,24 +943,22 @@ public class NStrikeIndustries {
 						scan.nextLine();
 					}
 					
-					else{
+					else{						
+						System.out.println("Novas Agendas De Pagamento Disponíveis:\n"
+								+ "\t4 - Semanal Segunda\n"
+								+ "\t5 - Semanal Quarta\n"
+								+ "\t6 - Mensal 1");
+						
 						System.out.printf("Deseja Ativar A Extenção Com Novas Agendas De Pagamento No Funcionário %s?\n"
 								+ "\t1 - Sim\n"
-								+ "\t2 - Escolher Outro Funcionário\n", Empregados[id].nome);
-						confirmar = scan.nextInt();
+								+ "\t2 - Não\n", Empregados[id].nome);
+						Empregados[id].agendaNova = scan.nextInt();
 						scan.nextLine();
+						confirmar = Empregados[id].agendaNova;
 						
 						if(confirmar == 1){
-							System.out.println("Novas Agendas De Pagamento Disponíveis:"
-									+ "\t5 - Semanal Segunda\n"
-									+ "\t6 - Semanal Quarta\n"
-									+ "\t7 - Mensal 1");
-							Empregados[id].agendaNova = scan.nextInt();
-							scan.nextLine();
-									
 							System.out.println("Extenção Das Agenda De Pagamento Ativada Com Sucesso!");
-						}					
-
+						}	
 					}
 				}
 			}
@@ -741,7 +1005,8 @@ public class NStrikeIndustries {
 						Empregados[id].comissaoValor = Cache.comissaoValor;
 						Empregados[id].salarioTotal = Cache.salarioTotal;
 								
-						Empregados[id].horas = Cache.horas;
+						Empregados[id].horasDia = Cache.horasDia;
+						Empregados[id].horasTotal = Cache.horasTotal;
 						Empregados[id].horasExtras = Cache.horasExtras;
 						
 						break;
@@ -780,9 +1045,12 @@ public class NStrikeIndustries {
 						break;
 						
 					case 4:
-						Troca.horas = Empregados[id].horas;
-						Empregados[id].horas = Cache.horas;
-						Cache.horas = Troca.horas;
+						Troca.horasDia = Empregados[id].horasDia;
+						Empregados[id].horasDia = Cache.horasDia;
+						Cache.horasDia = Troca.horasDia;
+						Troca.horasTotal = Empregados[id].horasTotal;
+						Empregados[id].horasTotal = Cache.horasTotal;
+						Cache.horasTotal = Troca.horasTotal;
 						Troca.horasExtras = Empregados[id].horasExtras;
 						Empregados[id].horasExtras = Cache.horasExtras;
 						Cache.horasExtras = Troca.horasExtras;
@@ -808,9 +1076,12 @@ public class NStrikeIndustries {
 								if(Data[3] % 7 == 5){ 
 									switch(Empregados[i].tipo){
 									case 1://Horista
-										Troca.horas = Empregados[i].horas;
-										Empregados[i].horas = Empregados[i].horasCache;
-										Empregados[i].horasCache = Troca.horas;								
+										Troca.horasDia = Empregados[i].horasDia;
+										Empregados[i].horasDia = Empregados[i].horasDiaCache;
+										Empregados[i].horasDiaCache = Troca.horasDia;
+										Troca.horasTotal = Empregados[i].horasTotal;
+										Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+										Empregados[i].horasTotalCache = Troca.horasTotal;	
 										Troca.horasExtras = Empregados[i].horasExtras;
 										Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 										Empregados[i].horasExtrasCache = Troca.horasExtras;
@@ -826,13 +1097,16 @@ public class NStrikeIndustries {
 								}
 								break;
 								
-							case 2://Bi-Semanal
+							case 2://Mensal
 								if(Data[0]  == 30){
 									switch(Empregados[i].tipo){
 									case 1://Horista
-										Troca.horas = Empregados[i].horas;
-										Empregados[i].horas = Empregados[i].horasCache;
-										Empregados[i].horasCache = Troca.horas;								
+										Troca.horasDia = Empregados[i].horasDia;
+										Empregados[i].horasDia = Empregados[i].horasDiaCache;
+										Empregados[i].horasDiaCache = Troca.horasDia;
+										Troca.horasTotal = Empregados[i].horasTotal;
+										Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+										Empregados[i].horasTotalCache = Troca.horasTotal;							
 										Troca.horasExtras = Empregados[i].horasExtras;
 										Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 										Empregados[i].horasExtrasCache = Troca.horasExtras;
@@ -852,9 +1126,12 @@ public class NStrikeIndustries {
 										if(Data[0]  == 28 || Data[0]  == 29){
 											switch(Empregados[i].tipo){
 											case 1://Horista
-												Troca.horas = Empregados[i].horas;
-												Empregados[i].horas = Empregados[i].horasCache;
-												Empregados[i].horasCache = Troca.horas;								
+												Troca.horasDia = Empregados[i].horasDia;
+												Empregados[i].horasDia = Empregados[i].horasDiaCache;
+												Empregados[i].horasDiaCache = Troca.horasDia;
+												Troca.horasTotal = Empregados[i].horasTotal;
+												Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+												Empregados[i].horasTotalCache = Troca.horasTotal;							
 												Troca.horasExtras = Empregados[i].horasExtras;
 												Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 												Empregados[i].horasExtrasCache = Troca.horasExtras;			;
@@ -872,15 +1149,18 @@ public class NStrikeIndustries {
 								}
 								break;
 								
-							case 3:// Mensal
+							case 3:// Bi-Semanal
 								
 								if(Data[3] % 7 == 5){
 									if((Data[3] / 7) % 2 == 0){
 										switch(Empregados[i].tipo){
 										case 1://Horista
-											Troca.horas = Empregados[i].horas;
-											Empregados[i].horas = Empregados[i].horasCache;
-											Empregados[i].horasCache = Troca.horas;								
+											Troca.horasDia = Empregados[i].horasDia;
+											Empregados[i].horasDia = Empregados[i].horasDiaCache;
+											Empregados[i].horasDiaCache = Troca.horasDia;
+											Troca.horasTotal = Empregados[i].horasTotal;
+											Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+											Empregados[i].horasTotalCache = Troca.horasTotal;							
 											Troca.horasExtras = Empregados[i].horasExtras;
 											Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 											Empregados[i].horasExtrasCache = Troca.horasExtras;
@@ -896,6 +1176,82 @@ public class NStrikeIndustries {
 									}							
 								}
 								break;
+								
+							case 4://Semanal Segunda
+								if(Data[3] % 7 == 1){ 
+									switch(Empregados[i].tipo){
+									case 1://Horista
+										Troca.horasDia = Empregados[i].horasDia;
+										Empregados[i].horasDia = Empregados[i].horasDiaCache;
+										Empregados[i].horasDiaCache = Troca.horasDia;
+										Troca.horasTotal = Empregados[i].horasTotal;
+										Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+										Empregados[i].horasTotalCache = Troca.horasTotal;	
+										Troca.horasExtras = Empregados[i].horasExtras;
+										Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
+										Empregados[i].horasExtrasCache = Troca.horasExtras;
+										break;
+									case 2://Assalariado
+										break;
+									case 3://Comissionado
+										Troca.comissaoValor = Empregados[i].comissaoValor;
+										Empregados[i].comissaoValor = Empregados[i].comissaoValorCache;
+										Empregados[i].comissaoValorCache = Troca.comissaoValor;
+										break;	
+									}
+								}
+								break;
+								
+							case 5://Semanal Quarta
+								if(Data[3] % 7 == 3){ 
+									switch(Empregados[i].tipo){
+									case 1://Horista
+										Troca.horasDia = Empregados[i].horasDia;
+										Empregados[i].horasDia = Empregados[i].horasDiaCache;
+										Empregados[i].horasDiaCache = Troca.horasDia;
+										Troca.horasTotal = Empregados[i].horasTotal;
+										Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+										Empregados[i].horasTotalCache = Troca.horasTotal;	
+										Troca.horasExtras = Empregados[i].horasExtras;
+										Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
+										Empregados[i].horasExtrasCache = Troca.horasExtras;
+										break;
+									case 2://Assalariado
+										break;
+									case 3://Comissionado
+										Troca.comissaoValor = Empregados[i].comissaoValor;
+										Empregados[i].comissaoValor = Empregados[i].comissaoValorCache;
+										Empregados[i].comissaoValorCache = Troca.comissaoValor;
+										break;	
+									}
+								}
+								break;
+								
+							case 6://Mensal 1
+								if(Data[0]  == 1){
+									switch(Empregados[i].tipo){
+									case 1://Horista
+										Troca.horasDia = Empregados[i].horasDia;
+										Empregados[i].horasDia = Empregados[i].horasDiaCache;
+										Empregados[i].horasDiaCache = Troca.horasDia;
+										Troca.horasTotal = Empregados[i].horasTotal;
+										Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+										Empregados[i].horasTotalCache = Troca.horasTotal;							
+										Troca.horasExtras = Empregados[i].horasExtras;
+										Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
+										Empregados[i].horasExtrasCache = Troca.horasExtras;
+										break;
+									case 2://Assalariado
+										break;
+									case 3://Comissionado
+										Troca.comissaoValor = Empregados[i].comissaoValor;
+										Empregados[i].comissaoValor = Empregados[i].comissaoValorCache;
+										Empregados[i].comissaoValorCache = Troca.comissaoValor;
+										break;	
+									}
+								}
+								break;
+								
 							}
 						}
 						break;	
@@ -968,9 +1324,12 @@ public class NStrikeIndustries {
 							break;
 							
 						case 4:
-							Troca.horas = Empregados[id].horas;
-							Empregados[id].horas = Cache.horas;
-							Cache.horas = Troca.horas;
+							Troca.horasDia = Empregados[i].horasDia;
+							Empregados[i].horasDia = Empregados[i].horasDiaCache;
+							Empregados[i].horasDiaCache = Troca.horasDia;
+							Troca.horasTotal = Empregados[i].horasTotal;
+							Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+							Empregados[i].horasTotalCache = Troca.horasTotal;
 							Troca.horasExtras = Empregados[id].horasExtras;
 							Empregados[id].horasExtras = Cache.horasExtras;
 							Cache.horasExtras = Troca.horasExtras;
@@ -996,9 +1355,12 @@ public class NStrikeIndustries {
 									if(Data[3] % 7 == 5){ 
 										switch(Empregados[i].tipo){
 										case 1://Horista
-											Troca.horas = Empregados[i].horas;
-											Empregados[i].horas = Empregados[i].horasCache;
-											Empregados[i].horasCache = Troca.horas;								
+											Troca.horasDia = Empregados[i].horasDia;
+											Empregados[i].horasDia = Empregados[i].horasDiaCache;
+											Empregados[i].horasDiaCache = Troca.horasDia;
+											Troca.horasTotal = Empregados[i].horasTotal;
+											Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+											Empregados[i].horasTotalCache = Troca.horasTotal;							
 											Troca.horasExtras = Empregados[i].horasExtras;
 											Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 											Empregados[i].horasExtrasCache = Troca.horasExtras;
@@ -1014,13 +1376,16 @@ public class NStrikeIndustries {
 									}
 									break;
 									
-								case 2://Bi-Semanal
+								case 2://Mensal
 									if(Data[0]  == 30){
 										switch(Empregados[i].tipo){
 										case 1://Horista
-											Troca.horas = Empregados[i].horas;
-											Empregados[i].horas = Empregados[i].horasCache;
-											Empregados[i].horasCache = Troca.horas;								
+											Troca.horasDia = Empregados[i].horasDia;
+											Empregados[i].horasDia = Empregados[i].horasDiaCache;
+											Empregados[i].horasDiaCache = Troca.horasDia;
+											Troca.horasTotal = Empregados[i].horasTotal;
+											Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+											Empregados[i].horasTotalCache = Troca.horasTotal;							
 											Troca.horasExtras = Empregados[i].horasExtras;
 											Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 											Empregados[i].horasExtrasCache = Troca.horasExtras;
@@ -1040,9 +1405,12 @@ public class NStrikeIndustries {
 											if(Data[0]  == 28 || Data[0]  == 29){
 												switch(Empregados[i].tipo){
 												case 1://Horista
-													Troca.horas = Empregados[i].horas;
-													Empregados[i].horas = Empregados[i].horasCache;
-													Empregados[i].horasCache = Troca.horas;								
+													Troca.horasDia = Empregados[i].horasDia;
+													Empregados[i].horasDia = Empregados[i].horasDiaCache;
+													Empregados[i].horasDiaCache = Troca.horasDia;
+													Troca.horasTotal = Empregados[i].horasTotal;
+													Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+													Empregados[i].horasTotalCache = Troca.horasTotal;							
 													Troca.horasExtras = Empregados[i].horasExtras;
 													Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 													Empregados[i].horasExtrasCache = Troca.horasExtras;			;
@@ -1060,15 +1428,18 @@ public class NStrikeIndustries {
 									}
 									break;
 									
-								case 3:// Mensal
+								case 3:// Bi-Semanal
 									
 									if(Data[3] % 7 == 5){
 										if((Data[3] / 7) % 2 == 0){
 											switch(Empregados[i].tipo){
 											case 1://Horista
-												Troca.horas = Empregados[i].horas;
-												Empregados[i].horas = Empregados[i].horasCache;
-												Empregados[i].horasCache = Troca.horas;								
+												Troca.horasDia = Empregados[i].horasDia;
+												Empregados[i].horasDia = Empregados[i].horasDiaCache;
+												Empregados[i].horasDiaCache = Troca.horasDia;
+												Troca.horasTotal = Empregados[i].horasTotal;
+												Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+												Empregados[i].horasTotalCache = Troca.horasTotal;							
 												Troca.horasExtras = Empregados[i].horasExtras;
 												Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
 												Empregados[i].horasExtrasCache = Troca.horasExtras;
@@ -1084,11 +1455,91 @@ public class NStrikeIndustries {
 										}							
 									}
 									break;
+								
+								case 4://Semanal Segunda
+									if(Data[3] % 7 == 1){ 
+										switch(Empregados[i].tipo){
+										case 1://Horista
+											Troca.horasDia = Empregados[i].horasDia;
+											Empregados[i].horasDia = Empregados[i].horasDiaCache;
+											Empregados[i].horasDiaCache = Troca.horasDia;
+											Troca.horasTotal = Empregados[i].horasTotal;
+											Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+											Empregados[i].horasTotalCache = Troca.horasTotal;	
+											Troca.horasExtras = Empregados[i].horasExtras;
+											Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
+											Empregados[i].horasExtrasCache = Troca.horasExtras;
+											break;
+										case 2://Assalariado
+											break;
+										case 3://Comissionado
+											Troca.comissaoValor = Empregados[i].comissaoValor;
+											Empregados[i].comissaoValor = Empregados[i].comissaoValorCache;
+											Empregados[i].comissaoValorCache = Troca.comissaoValor;
+											break;	
+										}
+									}
+									break;
+									
+								case 5://Semanal Quarta
+									if(Data[3] % 7 == 3){ 
+										switch(Empregados[i].tipo){
+										case 1://Horista
+											Troca.horasDia = Empregados[i].horasDia;
+											Empregados[i].horasDia = Empregados[i].horasDiaCache;
+											Empregados[i].horasDiaCache = Troca.horasDia;
+											Troca.horasTotal = Empregados[i].horasTotal;
+											Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+											Empregados[i].horasTotalCache = Troca.horasTotal;	
+											Troca.horasExtras = Empregados[i].horasExtras;
+											Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
+											Empregados[i].horasExtrasCache = Troca.horasExtras;
+											break;
+										case 2://Assalariado
+											break;
+										case 3://Comissionado
+											Troca.comissaoValor = Empregados[i].comissaoValor;
+											Empregados[i].comissaoValor = Empregados[i].comissaoValorCache;
+											Empregados[i].comissaoValorCache = Troca.comissaoValor;
+											break;	
+										}
+									}
+									break;
+									
+								case 6://Mensal 1
+									if(Data[0]  == 1){
+										switch(Empregados[i].tipo){
+										case 1://Horista
+											Troca.horasDia = Empregados[i].horasDia;
+											Empregados[i].horasDia = Empregados[i].horasDiaCache;
+											Empregados[i].horasDiaCache = Troca.horasDia;
+											Troca.horasTotal = Empregados[i].horasTotal;
+											Empregados[i].horasTotal = Empregados[i].horasTotalCache;
+											Empregados[i].horasTotalCache = Troca.horasTotal;							
+											Troca.horasExtras = Empregados[i].horasExtras;
+											Empregados[i].horasExtras = Empregados[i].horasExtrasCache;
+											Empregados[i].horasExtrasCache = Troca.horasExtras;
+											break;
+										case 2://Assalariado
+											break;
+										case 3://Comissionado
+											Troca.comissaoValor = Empregados[i].comissaoValor;
+											Empregados[i].comissaoValor = Empregados[i].comissaoValorCache;
+											Empregados[i].comissaoValorCache = Troca.comissaoValor;
+											break;	
+										}
+									}
+									break;
 								}
 							}
 							Data = novoDia(Data);
 							
-							if(Data[3]%30 == 0){
+							for(i = 0 ; i < 100 ; i++){
+								Empregados[i].horasTotal += Empregados[i].horasDia;
+								Empregados[i].horasDia = 0;
+							}
+							
+							if(Data[3]%30 == 1){
 								for(i = 0 ; i < 100 ; i++){
 									if(Empregados[i].sindicato == 1){
 										Empregados[i].salarioTotal -= Empregados[i].sindicatoTaxa;
@@ -1103,7 +1554,12 @@ public class NStrikeIndustries {
 				if(Comando == 7 && undo != 1){
 					Data = novoDia(Data);					
 					
-					if(Data[3]%30 == 0){
+					for(i = 0 ; i < 100 ; i++){
+						Empregados[i].horasTotal += Empregados[i].horasDia;
+						Empregados[i].horasDia = 0;
+					}
+					
+					if(Data[3]%30 == 1){
 						for(i = 0 ; i < 100 ; i++){
 							if(Empregados[i].sindicato == 1){
 								Empregados[i].salarioTotal -= Empregados[i].sindicatoTaxa;
