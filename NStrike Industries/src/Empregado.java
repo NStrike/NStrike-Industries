@@ -21,6 +21,7 @@ public class Empregado {
 	public float comissaoValorCache;
 	
 	public float salarioTotal; // Salario A Ser Pago No Dia De Pagamento
+	public float salarioTotalCache;
 	
 	public int horasDia; // Numero De Horas Trabalhadas No Dia
 	public int horasDiaCache;

@@ -550,6 +550,7 @@ public class NStrikeIndustries {
 			
 			else if(Comando == 7){
 				for(i = 0 ; i < 100 ; i++){
+					Empregados[i].salarioTotalCache = Empregados[i].salarioTotal;
 					switch(Empregados[i].agenda){
 					case 1://Semanal
 						if(Data[3] % 7 == 5){ 
@@ -1105,9 +1106,9 @@ public class NStrikeIndustries {
 						
 					case 7:
 						for(i = 0 ; i < 100 ; i++){
-							Troca.salarioTotal = Empregados[id].salarioTotal;
-							Empregados[id].salarioTotal = Cache.salarioTotal;
-							Cache.salarioTotal = Troca.salarioTotal;
+							Troca.salarioTotal = Empregados[i].salarioTotal;
+							Empregados[i].salarioTotal = Empregados[i].salarioTotalCache;
+							Empregados[i].salarioTotalCache = Troca.salarioTotal;
 							switch(Empregados[i].agenda){
 							
 							case 1://Semanal
@@ -1395,9 +1396,9 @@ public class NStrikeIndustries {
 							
 						case 7:
 							for(i = 0 ; i < 100 ; i++){
-								Troca.salarioTotal = Empregados[id].salarioTotal;
-								Empregados[id].salarioTotal = Cache.salarioTotal;
-								Cache.salarioTotal = Troca.salarioTotal;
+								Troca.salarioTotal = Empregados[i].salarioTotal;
+								Empregados[i].salarioTotal = Empregados[i].salarioTotalCache;
+								Empregados[i].salarioTotalCache = Troca.salarioTotal;
 								switch(Empregados[i].agenda){
 								
 								case 1://Semanal
